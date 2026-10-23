@@ -2,7 +2,7 @@
 # Secrets marked sync:false are asked for once in the dashboard and never stored here.
 services:
   - type: web
-    name: dr-beat-clinic
+    name: song-matcher
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
