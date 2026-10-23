@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DR. BEAT'S HEARTBREAK CLINIC</title>
+<meta name="api-base" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css">
+<style>
+  :root {
+    --bg:#0d2b2a; --panel:#123d3b; --ink:#fcfcfc; --dim:#8fc7bf; --line:#fcfcfc;
+    --mint:#5fe3c0; --yellow:#ffec27; --green:#00e436; --blue:#29adff; --red:#ff004d; --pink:#ff77a8;
+    --paper:#fbf6e9; --rule:#9fb7d8; --pink-ink:#be1e2d; --navy:#1d2b53; --pen:#2342a8;
+    --head:'Press Start 2P', 'Galmuri11', monospace;
+    --body:'Galmuri11', 'Galmuri9', ui-monospace, 'Apple SD Gothic Neo', monospace;
+  }
+  * { box-sizing:border-box; border-radius:0 !important; }
+  html, body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.55; }
+  body { background-image:linear-gradient(rgba(255,255,255,.035) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.035) 2px, transparent 2px);
+         background-size:32px 32px; }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:50;
+    background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.2) 2px 3px); }
+  main { max-width:700px; margin:0 auto; padding:24px 16px 60px; }
+  .px { background:var(--panel); position:relative; margin:4px;
+        box-shadow: 0 -4px 0 0 var(--line), 0 4px 0 0 var(--line), -4px 0 0 0 var(--line), 4px 0 0 0 var(--line),
+                    0 0 0 4px var(--bg), 8px 8px 0 4px rgba(0,0,0,.5); }
+  @keyframes blink { 50% { opacity:0; } }
+
+  header { display:flex; gap:18px; align-items:center; justify-content:center; margin-bottom:22px; flex-wrap:wrap; text-align:center; }
+  .sign { font-family:var(--head); font-size:clamp(15px, 4.4vw, 24px); line-height:1.5; margin:0; color:var(--ink);
+          text-shadow:3px 3px 0 var(--red), 6px 6px 0 #000; }
+  .sign small { display:block; font-size:.48em; color:var(--mint); text-shadow:2px 2px 0 #000; margin-top:8px; }
+  .now { font-family:var(--head); font-size:10px; color:var(--yellow); margin-top:10px; animation:blink 1s steps(2) infinite; }
+  .status { font-size:13px; color:var(--dim); margin-top:8px; }
+  .cross { display:inline-block; width:20px; height:20px; position:relative; vertical-align:middle; margin-right:6px; flex:none; }
+  .cross::before, .cross::after { content:""; position:absolute; background:var(--red); }
+  .cross::before { left:7px; top:0; width:6px; height:20px; } .cross::after { top:7px; left:0; width:20px; height:6px; }
+
+  .intake { padding:16px; }
+  .bubble p { margin:0 0 12px; background:var(--ink); color:#000; padding:10px 12px; font-family:var(--head); font-size:10px; line-height:1.7; }
+  .label { font-family:var(--head); font-size:10px; color:var(--yellow); margin:0 0 8px; }
+  textarea { width:100%; min-height:110px; resize:vertical; background:#000; color:var(--ink); border:0; outline:0;
+             font-family:var(--body); font-size:17px; padding:12px; caret-color:var(--mint); }
+  textarea:focus { box-shadow:inset 0 0 0 2px var(--mint); }
+  .controls { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+  button { font-family:var(--head); font-size:12px; cursor:pointer; border:0; color:#000; background:var(--mint);
+           padding:12px 16px; box-shadow:0 4px 0 0 #2a8f78, 4px 4px 0 0 #000; }
+  button:active { transform:translateY(4px); box-shadow:none; }
+  button:disabled { filter:grayscale(1); cursor:wait; }
+  button.ghost { background:var(--panel); color:var(--ink); box-shadow:0 0 0 2px var(--ink); font-size:9px; padding:10px; }
+  button.ghost[aria-pressed="true"] { background:var(--yellow); color:#000; }
+  .hint { font-size:13px; color:var(--dim); }
+
+  .cases { margin:22px 4px 0; }
+  .cases .label { color:var(--mint); }
+  .case { display:block; width:100%; text-align:left; background:transparent; color:var(--ink); box-shadow:none;
+          font-family:var(--body); font-size:16px; padding:6px 8px 6px 28px; position:relative; }
+  .case::before { content:"▶"; position:absolute; left:6px; color:var(--yellow); opacity:0; }
+  .case:hover, .case:focus { background:#1b5350; outline:0; }
+  .case:hover::before, .case:focus::before { opacity:1; animation:blink .6s steps(2) infinite; }
+  .case b { font-family:var(--head); font-size:9px; color:var(--pink); margin-right:8px; font-weight:normal; }
+
+  #out { margin-top:30px; }
+  .exam { padding:18px; text-align:center; }
+  .exam p { font-family:var(--head); font-size:11px; margin:0 0 14px; }
+  .ecg { width:100%; height:60px; background:#001b10; display:block; }
+  .ecg polyline { fill:none; stroke:var(--green); stroke-width:3; stroke-dasharray:420; stroke-dashoffset:420; }
+  .ecg.anim polyline { animation:trace 1.4s steps(28) infinite; }
+  @keyframes trace { to { stroke-dashoffset:0; } }
+  .err { padding:16px; } .err b { font-family:var(--head); font-size:11px; color:var(--red); display:block; margin-bottom:8px; }
+
+  /* ================= PRESCRIPTION FORM ================= */
+  .rxpaper { position:relative; overflow:hidden; background:var(--paper); color:var(--navy); margin:4px; padding:26px 22px 18px;
+             box-shadow: 0 4px 0 0 var(--navy), -4px 0 0 0 var(--navy), 4px 0 0 0 var(--navy), 8px 8px 0 4px rgba(0,0,0,.55); }
+  .rxpaper::before { /* perforated tear-off edge */
+    content:""; position:absolute; left:0; right:0; top:0; height:10px;
+    background:radial-gradient(circle at 6px 0, var(--bg) 4px, transparent 5px) 0 0/12px 10px repeat-x, var(--paper); }
+  .watermark { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;
+               font-family:var(--head); font-size:clamp(14px, 4vw, 24px); line-height:2; text-align:center;
+               color:rgba(190,30,45,.06); transform:rotate(-24deg); }
+  .rxpaper > *:not(.watermark) { position:relative; }
+
+  .lh { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; }
+  .lh-name { display:flex; gap:10px; align-items:flex-start; }
+  .lh h2 { font-family:var(--head); font-size:clamp(12px, 3.2vw, 16px); line-height:1.5; margin:0; color:var(--navy); }
+  .lh .sub { font-family:var(--head); font-size:8px; line-height:1.8; color:var(--pink-ink); margin-top:4px; }
+  .lh .addr { font-size:13px; margin-top:4px; }
+  .lh .lic { font-size:12px; text-align:right; line-height:1.6; }
+  .lh .lic b { font-family:var(--head); font-size:8px; font-weight:normal; }
+  .rule2 { border:0; border-top:4px solid var(--navy); margin:12px 0 2px; }
+  .rule1 { border:0; border-top:2px solid var(--navy); margin:0 0 12px; }
+
+  .patient { display:grid; grid-template-columns:1fr 1fr; gap:10px 18px; }
+  .f { display:flex; align-items:flex-end; gap:8px; min-width:0; }
+  .f b { font-family:var(--head); font-size:8px; font-weight:normal; white-space:nowrap; padding-bottom:4px; }
+  .f span { flex:1; min-width:0; border-bottom:2px solid var(--rule); color:var(--pen); font-size:16px; padding:0 2px 1px; overflow-wrap:anywhere; }
+  .f.wide { grid-column:1 / -1; }
+  .f.dx span { font-size:15px; }
+
+  .rxsym { display:flex; align-items:flex-end; gap:10px; margin:16px 0 4px; }
+  .rxsym .r { font-family:Georgia, 'Times New Roman', serif; font-size:56px; line-height:.8; color:var(--pink-ink); font-weight:bold; }
+  .rxsym small { font-family:var(--head); font-size:8px; padding-bottom:4px; opacity:.7; }
+
+  .item { display:grid; grid-template-columns:30px 1fr; gap:4px 10px; padding:12px 0; border-bottom:2px dashed var(--rule); }
+  .item .no { font-family:var(--head); font-size:12px; color:var(--pink-ink); padding-top:2px; }
+  .item .main { display:flex; gap:12px; align-items:center; }
+  .item .main img, .item .main svg { width:64px; height:64px; flex:none; image-rendering:pixelated; box-shadow:0 0 0 3px var(--navy); background:#000; }
+  .item .main .glassbox { width:64px; height:64px; flex:none; display:flex; align-items:center; justify-content:center; }
+  .item .main .glassbox svg { box-shadow:none; background:transparent; }
+  .drug { font-family:var(--head); font-size:clamp(11px, 3vw, 14px); line-height:1.55; overflow-wrap:anywhere; }
+  .drug-sub { font-size:14px; opacity:.85; margin-top:2px; }
+  .kv { grid-column:2; display:grid; grid-template-columns:84px minmax(0, 1fr); gap:3px 10px; margin-top:6px; font-size:14px; }
+  .kv b { font-family:var(--head); font-size:8px; font-weight:normal; padding-top:4px; white-space:nowrap; }
+  .kv span { color:var(--pen); }
+  .hp { display:inline-flex; gap:2px; vertical-align:middle; margin-right:6px; } .hp i { width:9px; height:9px; background:#d8ccb4; display:block; }
+  .hp i.on { background:#00a32a; } .hp.mid i.on { background:#e0a000; } .hp.low i.on { background:var(--pink-ink); }
+
+  .notes-h { font-family:var(--head); font-size:8px; margin:14px 0 4px; }
+  .notes { color:var(--pen); font-size:15px; line-height:1.7; cursor:pointer; min-height:2em;
+           background:repeating-linear-gradient(to bottom, transparent 0 25px, var(--rule) 25px 26px); }
+  .notes p { margin:0; } .notes p::before { content:"— "; }
+  .cursor { display:inline-block; width:8px; height:14px; background:var(--pen); vertical-align:middle; animation:blink .7s steps(2) infinite; }
+
+  .checks { display:flex; gap:18px; flex-wrap:wrap; margin:14px 0 4px; font-size:14px; }
+  .box { display:inline-block; width:14px; height:14px; border:2px solid var(--navy); vertical-align:-2px; margin-right:6px; position:relative; }
+  .box.on::after { content:""; position:absolute; left:2px; top:2px; width:6px; height:6px; background:var(--pen); }
+
+  .frame { margin-top:12px; padding:4px; background:var(--navy); }
+  .frame iframe { display:block; width:100%; height:152px; border:0; background:#000; }
+  .fill { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
+  .fill b { font-family:var(--head); font-size:8px; font-weight:normal; }
+  .fill a { font-family:var(--head); font-size:9px; color:var(--paper); background:var(--navy); text-decoration:none; padding:8px 10px; }
+  .fill a:hover, .fill a:focus { background:var(--pink-ink); outline:0; }
+
+  .sigrow { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-top:20px; flex-wrap:wrap; }
+  .sigline { min-width:200px; flex:1; }
+  .sigline .scrawl { font-family:'Brush Script MT', 'Snell Roundhand', cursive; font-size:30px; color:var(--pen); line-height:1;
+                     transform:rotate(-5deg); display:inline-block; padding-left:10px; }
+  .sigline .line { border-top:2px solid var(--navy); margin-top:2px; padding-top:4px; font-family:var(--head); font-size:7px; line-height:1.8; }
+  .stamp { font-family:var(--head); font-size:9px; line-height:1.6; text-align:center; color:var(--pink-ink); border:3px double var(--pink-ink);
+           padding:8px 10px; transform:rotate(-9deg); opacity:.85; }
+  .stamp.llm { color:#00813a; border-color:#00813a; }
+  .reveal .stamp { animation:stamp .25s steps(3) both .5s; }
+  @keyframes stamp { from { transform:rotate(-9deg) scale(2.2); opacity:0; } to { transform:rotate(-9deg) scale(1); opacity:.85; } }
+
+  .rxfoot { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-top:16px; flex-wrap:wrap;
+            border-top:2px solid var(--navy); padding-top:10px; }
+  .barcode { display:block; height:34px; }
+  .rxfoot small { font-size:11px; line-height:1.5; opacity:.75; max-width:340px; }
+  .sys { margin-top:10px; font-size:13px; opacity:.75; }
+  .actions { display:flex; gap:10px; margin:12px 4px 0; flex-wrap:wrap; }
+
+  /* Serious cases: plain care plan — no jokes, no stamp, no barcode, system font. */
+  .care { font-family:-apple-system, system-ui, 'Apple SD Gothic Neo', sans-serif; font-size:15px; line-height:1.5;
+          background:#f6f1ff; color:#241d3b; padding:14px 16px; margin:0 4px 22px; border-left:6px solid #8b6fd6; }
+  .rxpaper.serious { font-family:-apple-system, system-ui, 'Apple SD Gothic Neo', sans-serif; }
+  .rxpaper.serious .drug, .rxpaper.serious .lh h2 { font-family:inherit; font-weight:600; font-size:17px; }
+
+  footer { margin:30px 4px 0; font-size:12px; color:var(--dim); text-align:center; }
+  @media (max-width:460px) {
+    .patient { grid-template-columns:1fr; }
+    .rxpaper { padding:24px 14px 16px; }
+    .lh .lic { text-align:left; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    body::after { display:none; }
+  }
+  @media print {
+    body { background:#fff !important; } body::after { display:none; }
+    header, .intake, .cases, footer, .actions, .frame, .care { display:none !important; }
+    .rxpaper { box-shadow:none; border:2px solid #000; }
+    .rxpaper::before { display:none; }
+    * { animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span id="doc"></span>
+    <div>
+      <h1 class="sign"><span class="cross" aria-hidden="true"></span>DR. BEAT'S<small>HEARTBREAK CLINIC · SONGS &amp; SPIRITS</small></h1>
+      <div class="now" aria-hidden="true">NOW SEEING: YOU</div>
+      <div class="status" id="status">&nbsp;</div>
+    </div>
+  </header>
+
+  <section class="px intake">
+    <div class="bubble"><p>WHAT SEEMS TO BE THE PROBLEM, PATIENT?</p></div>
+    <p class="label"><label for="t">SYMPTOMS:</label></p>
+    <textarea id="t" placeholder="e.g. We've been long distance for a year and I miss her so much…"></textarea>
+    <div class="controls">
+      <button id="go">▶ SEE THE DOCTOR</button>
+      <button class="ghost" id="zero" aria-pressed="false">0% ABV: OFF</button>
+      <button class="ghost" id="mute" aria-pressed="false">♪ SOUND ON</button>
+      <span class="hint">⌘/Ctrl + Enter</span>
+    </div>
+    <p class="hint">Privacy: what you type is sent to the clinic server and to Google Gemini (free tier — Google may review it). Leave out real names.</p>
+  </section>
+
+  <nav class="cases" aria-label="Example situations">
+    <p class="label">— COMMON CASES —</p>
+    <div id="chips"></div>
+  </nav>
+
+  <section id="out" aria-live="polite"></section>
+  <footer>Dr. Beat is a jukebox, not a doctor. Not medical advice. Every drink has a 0% version; if you drink, drink responsibly and only if you're of legal age.</footer>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const t = $('t'), out = $('out'), go = $('go'), muteBtn = $('mute'), zeroBtn = $('zero');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- pixel sprites ---------- */
+  function grid(rows, pal, px, label) {
+    const w = rows[0].length, h = rows.length;
+    let r = '';
+    rows.forEach((row, y) => [...row].forEach((c, x) => {
+      if (pal[c]) r += `<rect x="${x}" y="${y}" width="1" height="1" fill="${pal[c]}"/>`;
+    }));
+    const size = px || 84;
+    return `<svg viewBox="-1 -1 ${w + 2} ${h + 2}" width="${size}" height="${size}" shape-rendering="crispEdges" ${label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"'}>${r}</svg>`;
+  }
+  const DOCTOR = ["...HHHHHH...", "..HHMMHHHH..", "..HSMMSSSH..", "..SSESSESS..", "..SSSSSSSS..", "...SSRRSS...",
+                  "....SSSS....", "..CCCTTCCC..", ".CCCCTTCCCC.", ".CCPCTTCCCC.", ".SCCCCCCCCS.", "..CCCCCCCC..", "..BB....BB.."];
+  const DOC_PAL = {H:'#5a3a22', M:'#c0c8d0', S:'#ffccaa', E:'#1d2b53', R:'#ff004d', C:'#fcfcfc', T:'#29adff', P:'#ff004d', B:'#1d2b53'};
+  $('doc').outerHTML = grid(DOCTOR, DOC_PAL, 72, 'Dr. Beat');
+
+  const ICONS = {
+    heart: ["..XX...XX..", ".XXXX.XXXX.", "XXXXXXXXXXX", "XXXXXXXXXXX", "XXXXXXXXXXX", ".XXXXXXXXX.", "..XXXXXXX..", "...XXXXX...", "....XXX....", ".....X....."],
+    broken:["..XX...XX..", ".XXXX.XXXX.", "XXXXX.XXXXX", "XXXX.XXXXXX", "XXXXX.XXXXX", ".XXXX.XXXX.", "..XX.XXXX..", "...XX.XX...", "....X.X....", ".....X....."],
+    note:  ["....XXXXXX.", "....XXXXXX.", "....X....X.", "....X....X.", "....X....X.", "....X....X.", ".XXXX..XXXX", "XXXXX.XXXXX", "XXXXX.XXXXX", ".XXX...XXX."],
+  };
+  const GLASSES = {
+    coupe:   ["GGGGGGGGGG", "GLLLLLLLLG", ".GLLLLLLG.", "..GGLLGG..", "....GG....", "....GG....", "....GG....", "..GGGGGG.."],
+    rocks:   ["G........G", "G........G", "GLLLLLLLLG", "GLLLLLLLLG", "GLLLLLLLLG", "GLLLLLLLLG", "GGGGGGGGGG"],
+    highball:["..G....G..", "..GLLLLG..", "..GLLLLG..", "..GLLLLG..", "..GLLLLG..", "..GLLLLG..", "..GLLLLG..", "..GGGGGG.."],
+    flute:   ["...G..G...", "...GLLG...", "...GLLG...", "...GLLG...", "....GG....", "....GG....", "...GGGG..."],
+    mug:     ["GLLLLLLG..", "GLLLLLLGGG", "GLLLLLLG.G", "GLLLLLLGGG", "GLLLLLLG..", "GGGGGGGG.."],
+    wine:    [".G......G.", ".GLLLLLLG.", "..GLLLLG..", "...GGGG...", "....GG....", "....GG....", "..GGGGGG.."],
+  };
+  const glass = (d) => grid(GLASSES[d.glass] || GLASSES.coupe, {G: '#1d2b53', L: d.color}, 60, d.name + ' glass');
+
+  /* ---------- sound ---------- */
+  let ctx = null, muted = localStorage.getItem('lq-muted') === '1', zero = localStorage.getItem('lq-zero') === '1';
+  const renderToggles = () => {
+    muteBtn.textContent = muted ? '♪ SOUND OFF' : '♪ SOUND ON'; muteBtn.setAttribute('aria-pressed', String(muted));
+    zeroBtn.textContent = zero ? '0% ABV: ON' : '0% ABV: OFF'; zeroBtn.setAttribute('aria-pressed', String(zero));
+  };
+  renderToggles();
+  muteBtn.onclick = () => { muted = !muted; localStorage.setItem('lq-muted', muted ? '1' : '0'); renderToggles(); if (!muted) play([[880, .06]]); };
+  zeroBtn.onclick = () => { zero = !zero; localStorage.setItem('lq-zero', zero ? '1' : '0'); renderToggles(); SFX.blip(); };
+  function play(notes, type = 'square') {
+    if (muted) return;
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') ctx.resume();
+      let at = ctx.currentTime;
+      for (const [f, d] of notes) {
+        if (f) {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = type; o.frequency.value = f;
+          g.gain.setValueAtTime(.045, at); g.gain.exponentialRampToValueAtTime(.0001, at + d);
+          o.connect(g).connect(ctx.destination); o.start(at); o.stop(at + d);
+        }
+        at += d;
+      }
+    } catch (e) { /* audio is optional */ }
+  }
+  const SFX = {
+    start: () => play([[659, .06], [0, .05], [659, .06], [0, .2], [659, .06], [0, .05], [659, .06]]),
+    fanfare: () => play([[784, .09], [988, .09], [1175, .09], [1568, .25]]),
+    sad: () => play([[523, .14], [494, .14], [466, .14], [440, .32]], 'triangle'),
+    stamp: () => play([[110, .05], [80, .08]], 'sawtooth'),
+    blip: () => play([[1200, .015]]),
+    error: () => play([[196, .12], [147, .22]]),
+  };
+
+  /* ---------- status + cases ---------- */
+  const API = (document.querySelector('meta[name="api-base"]').content || '').replace(/\/$/, '');
+  $('status').textContent = API ? 'WAKING THE DOCTOR… (free server, can take ~1 min)' : '\u00a0';
+  fetch(API + '/api/status').then(r => r.json()).then(s => {
+    $('status').textContent = (s.llm ? 'ON CALL: ' + s.llm : 'ON CALL: CATALOGUE (AI OFF)') + '  ·  SPOTIFY: ' + (s.spotify ? 'ON' : 'OFF');
+  }).catch(() => { $('status').textContent = 'CLINIC SERVER OFFLINE — try again in a minute'; });
+  const examples = [
+    "He cheated on me with my best friend", "We just got engaged!!", "I don't know what we are, he only texts me late at night",
+    "Long distance, I miss her so much", "I finally moved on and I'm so much happier", "We keep breaking up and getting back together"];
+  examples.forEach((e, i) => {
+    const b = document.createElement('button');
+    b.className = 'case'; b.type = 'button';
+    b.innerHTML = `<b>CASE ${String(i + 1).padStart(2, '0')}</b>${esc(e)}`;
+    b.onclick = () => { t.value = e; run(); };
+    $('chips').appendChild(b);
+  });
+
+  /* ---------- helpers for the form ---------- */
+  const MOOD = { euphoric: ['#ff77a8', 'heart'], warm: ['#ffa300', 'heart'], angry: ['#ff004d', 'broken'],
+                 melancholy: ['#29adff', 'broken'], restless: ['#a77bff', 'note'], wistful: ['#83769c', 'note'] };
+  const SAD = ['breakup', 'heartbreak', 'cheating', 'betrayal', 'divorce', 'unrequited', 'missing'];
+  function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+  const rxNo = (text) => 'RX-' + hash(text).toString(36).toUpperCase().padStart(7, '0').slice(-7);
+  const mmss = (sec) => sec ? Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0') : null;
+  function hp(conf) {
+    const n = Math.max(0, Math.min(10, Math.round(conf * 10)));
+    const cls = n >= 7 ? '' : n >= 4 ? 'mid' : 'low';
+    return `<span class="hp ${cls}" aria-hidden="true">${Array.from({length: 10}, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+  }
+  function barcode(seed) {
+    let x = 0, r = '', h = hash(seed) || 1;
+    for (let i = 0; i < 46; i++) {
+      h = Math.imul(h ^ (h >>> 13), 1103515245) >>> 0;
+      const w = 1 + (h % 3);
+      if (i % 2 === 0) r += `<rect x="${x}" y="0" width="${w}" height="30"/>`;
+      x += w;
+    }
+    return `<svg class="barcode" viewBox="0 0 ${x} 30" width="${x * 2}" height="34" preserveAspectRatio="none" shape-rendering="crispEdges" fill="#1d2b53" aria-hidden="true">${r}</svg>`;
+  }
+  function typewrite(box, lines, sound) {
+    box.innerHTML = '';
+    const ps = lines.map(() => { const p = document.createElement('p'); box.appendChild(p); return p; });
+    if (reduced) { ps.forEach((p, i) => p.textContent = lines[i]); return; }
+    let li = 0, ci = 0, done = false;
+    const cur = document.createElement('span'); cur.className = 'cursor';
+    box.onclick = () => { done = true; ps.forEach((p, i) => p.textContent = lines[i]); cur.remove(); };
+    (function step() {
+      if (done) return;
+      if (li >= lines.length) { cur.remove(); return; }
+      ci++;
+      ps[li].textContent = lines[li].slice(0, ci); ps[li].appendChild(cur);
+      if (sound && ci % 3 === 0) SFX.blip();
+      if (ci >= lines[li].length) { li++; ci = 0; setTimeout(step, 200); } else setTimeout(step, 16);
+    })();
+  }
+
+  /* ---------- the prescription ---------- */
+  function render(d, text) {
+    const a = d.analysis, s = d.song, sp = s.spotify, rx = d.rx, dr = rx.drink, serious = rx.serious;
+    const key = Object.keys(MOOD).find(k => (a.mood || '').startsWith(k)) || 'euphoric';
+    const sad = Object.entries(a.themes || {}).some(([k, w]) => w >= 1 && SAD.includes(k));
+    const art = sp && sp.image ? `<img src="${esc(sp.image)}" alt="Album art">`
+                               : grid(ICONS[sad ? 'broken' : MOOD[key][1]], {X: MOOD[key][0]}, 64);
+    const no = rxNo(text || s.title);
+    const today = new Date().toLocaleDateString();
+    const len = mmss(sp && sp.duration_s);
+    const conf = Math.round(s.confidence * 100);
+    let html = '';
+    if (d.safety_note) html += `<div class="care" role="note">💛 ${esc(d.safety_note)}</div>`;
+
+    html += `<article class="rxpaper reveal ${serious ? 'serious' : ''}" aria-label="Prescription">
+      ${serious ? '' : '<div class="watermark" aria-hidden="true">NOT VALID AT ANY PHARMACY<br>FOR ENTERTAINMENT ONLY</div>'}
+      <div class="lh">
+        <div class="lh-name">${serious ? '' : '<span class="cross" aria-hidden="true"></span>'}
+          <div><h2>${serious ? 'Care plan' : 'DR. BEAT, M.D.'}</h2>
+            ${serious ? '' : `<div class="sub">MUSIC DOCTOR · HEARTBREAK SPECIALIST</div>
+            <div class="addr">Level 1-1, 8-Bit Avenue · Tel. 1-800-SAD-SONG</div>`}</div>
+        </div>
+        ${serious ? '' : `<div class="lic"><b>LIC. NO.</b> 8BIT-0001<br><b>CLINIC</b> Heartbreak Clinic</div>`}
+      </div>
+      <hr class="rule2"><hr class="rule1">
+
+      <div class="patient">
+        <div class="f"><b>NAME</b><span>You</span></div>
+        <div class="f"><b>DATE</b><span>${esc(today)}</span></div>
+        ${serious ? '' : `<div class="f"><b>AGE</b><span>Old enough to feel this</span></div>
+        <div class="f"><b>RX NO.</b><span>${esc(no)}</span></div>`}
+        ${rx.diagnosis ? `<div class="f wide dx"><b>DX</b><span>${esc(rx.diagnosis)}</span></div>` : ''}
+        ${a.summary ? `<div class="f wide dx"><b>HX</b><span>${esc(a.summary)}</span></div>` : ''}
+      </div>
+
+      <div class="rxsym"><span class="r" aria-hidden="true">℞</span><small>${serious ? 'RECOMMENDED' : 'PRESCRIBED'}</small></div>
+
+      <div class="item">
+        <div class="no">1.</div>
+        <div class="main">${art}
+          <div><div class="drug">${esc(s.title)}</div>
+            <div class="drug-sub">${esc(s.artist)}${s.year ? ' · ' + esc(s.year) : ''}${sp && sp.album ? ' · ' + esc(sp.album) : ''}</div></div>
+        </div>
+        <div class="kv">
+          ${serious ? '' : `<b>STRENGTH</b><span>${hp(s.confidence)}${conf} mg of feels (${conf}% match)</span>
+          <b>ROUTE</b><span>Audio · both ears</span>`}
+          <b>DISP.</b><span>1 track${len ? ' (' + esc(len) + ')' : ''}</span>
+          <b>SIG.</b><span>${esc(rx.dosage)}</span>
+          ${serious ? '' : '<b>REFILLS</b><span>Unlimited (streaming)</span>'}
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="no">2.</div>
+        <div class="main"><span class="glassbox">${glass(dr)}</span>
+          <div><div class="drug">${esc(dr.name)}${dr.alcohol_free ? ' (0% ABV)' : ''}</div>
+            <div class="drug-sub">${esc(dr.ingredients.join(' · '))}</div></div>
+        </div>
+        <div class="kv">
+          <b>DISP.</b><span>1 glass${dr.alcohol_free ? ', alcohol-free' : ''}</span>
+          <b>SIG.</b><span>${esc(dr.why)}</span>
+          ${dr.mocktail ? `<b>0% SUBST.</b><span>${esc(dr.mocktail.name)}: ${esc(dr.mocktail.ingredients.join(' · '))}</span>` : ''}
+        </div>
+      </div>
+
+      <div class="notes-h">${serious ? 'NOTES' : "DOCTOR'S NOTES"}</div>
+      <div class="notes" id="notes" title="Tap to skip"></div>
+
+      ${serious ? '' : `<div class="checks">
+        <span><span class="box ${dr.alcohol_free ? '' : 'on'}"></span>Dispense as written</span>
+        <span><span class="box ${dr.alcohol_free ? 'on' : ''}"></span>0% substitution</span>
+      </div>`}
+
+      ${sp ? `<div class="frame"><iframe src="${esc(sp.embed)}" title="Spotify player" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>` : ''}
+      <div class="fill"><b>FILL AT:</b>
+        <a href="${esc(sp ? sp.url : s.links.spotify)}" target="_blank" rel="noopener">▶ SPOTIFY</a>
+        <a href="${esc(s.links.youtube)}" target="_blank" rel="noopener">▶ YOUTUBE</a>
+      </div>
+
+      ${serious ? '' : `<div class="sigrow">
+        <div class="sigline"><span class="scrawl" aria-hidden="true">Dr. Beat</span>
+          <div class="line">PRESCRIBER SIGNATURE · DR. BEAT, M.D. (MUSIC)</div></div>
+        <div class="stamp ${s.source === 'llm' ? 'llm' : ''}">${s.source === 'llm' ? 'AI<br>PICK' : 'CATA-<br>LOGUE'}</div>
+      </div>
+      <div class="rxfoot">${barcode(no)}
+        <small>${esc(no)} · Dr. Beat is a jukebox, not a doctor. Not medical advice. Drink responsibly and only if of legal age.</small>
+      </div>`}
+      ${d.note ? `<div class="sys">Clinic note: ${esc(d.note)}</div>` : ''}
+    </article>
+    <div class="actions"><button class="ghost" id="print">🖨 PRINT</button></div>`;
+    out.innerHTML = html;
+    $('print').onclick = () => window.print();
+    typewrite($('notes'), s.reasons || [], !serious);
+    if (!serious) { setTimeout(SFX.stamp, 550); setTimeout(sad ? SFX.sad : SFX.fanfare, 800); }
+  }
+
+  function showError(msg) {
+    out.innerHTML = `<div class="px err" role="alert"><b>!! CODE BLUE</b>${esc(msg)}</div>`;
+    SFX.error();
+  }
+
+  async function run() {
+    if (go.disabled) return;
+    SFX.start();
+    go.disabled = true;
+    const text = t.value;
+    out.innerHTML = `<div class="px exam"><p>EXAMINING… CONSULTING THE JUKEBOX…</p>
+      <svg class="ecg ${reduced ? '' : 'anim'}" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="0,30 60,30 75,30 85,8 95,52 105,30 150,30 165,30 175,8 185,52 195,30 240,30 255,30 265,8 275,52 285,30 300,30"/></svg></div>`;
+    try {
+      const r = await fetch(API + '/api/match', {method: 'POST', headers: {'Content-Type': 'application/json'},
+                                           body: JSON.stringify({text, no_alcohol: zero})});
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) return showError(d.error || 'The clinic is having trouble (' + r.status + '). Try again.');
+      render(d, text);
+      out.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block: 'start'});
+    } catch (e) {
+      showError("Can't reach the clinic server. Is it still running?");
+    } finally {
+      go.disabled = false;
+    }
+  }
+  go.onclick = run;
+  t.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) run(); });
+
+  /* ---------- ?demo=1 / ?demo=serious : render a fixed sample without calling the AI ---------- */
+  const demo = new URLSearchParams(location.search).get('demo');
+  if (demo) {
+    const serious = demo === 'serious';
+    render({
+      analysis: {themes: {guilt: 1, cheating: 1}, mood: 'melancholy / aching',
+                 summary: 'Patient cheated on their partner and is struggling with intense guilt.'},
+      song: {title: 'Unfaithful', artist: 'Rihanna', year: '2006', confidence: 0.93, source: 'llm',
+             reasons: ['Sung from the point of view of the one who cheated, wracked with guilt.', 'Verified as a real track via Spotify + LRCLIB lyrics'],
+             links: {youtube: '#', spotify: '#'}, spotify: null},
+      rx: {serious, diagnosis: serious ? null : 'Acute guilty conscience, with complications of trust fracture.',
+           dosage: serious ? 'Listen whenever you need it. Please be gentle with yourself.' : 'Listen in quiet reflection before having any difficult conversations.',
+           drink: serious ? {name: 'Honey-Lemon Toddy', glass: 'mug', color: '#d89040', ingredients: ['honey', 'lemon', 'hot water', 'cinnamon stick'], why: 'A warm hug in a mug.', alcohol_free: true, mocktail: null}
+                          : {name: 'Hot Toddy', glass: 'mug', color: '#d89040', ingredients: ['whisky', 'honey', 'lemon', 'hot water'], why: 'A warm hug in a mug for cold, lonely nights.', alcohol_free: false,
+                             mocktail: {name: 'Honey-Lemon Toddy', ingredients: ['honey', 'lemon', 'hot water', 'cinnamon stick']}}},
+      safety_note: serious ? 'If you are being hurt or feel unsafe, please reach out to someone you trust or a local hotline.' : null,
+      note: null,
+    }, 'demo');
+  }
+})();
+</script>
+</body>
+</html>

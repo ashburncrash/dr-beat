@@ -1,0 +1,31 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo.
+# Secrets marked sync:false are asked for once in the dashboard and never stored here.
+services:
+  - type: web
+    name: dr-beat-clinic
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 -m songmatch.web
+    healthCheckPath: /api/status
+    envVars:
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: LLM_MODEL
+        value: gemini-3.5-flash
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: SPOTIFY_MARKET
+        value: US
+      - key: ALLOWED_ORIGINS
+        value: https://ashburncrash.github.io
+      - key: RATE_PER_MIN
+        value: "6"
+      - key: RATE_PER_DAY
+        value: "60"
+      - key: LLM_DAILY_BUDGET
+        value: "200"

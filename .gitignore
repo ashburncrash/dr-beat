@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+data/spotify_cache.json
+data/lyrics_cache.json
+*.tmp
+__pycache__/
+.DS_Store
