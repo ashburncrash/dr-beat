@@ -45,7 +45,7 @@ Spotify's Feb-2026 rules for new apps: the app owner needs **Premium**; no audio
 ## Deploy (GitHub Pages front end + Render backend)
 
 1. **Backend:** Render → New → Blueprint → pick this repo. `render.yaml` creates `dr-beat-clinic` (free plan) and asks for `GEMINI_API_KEY` and the Spotify ID/secret. Keys live only in Render.
-2. **Front end:** `python3 scripts/build_pages.py https://<your-service>.onrender.com`, commit `docs/`, push. Pages serves `main` → `/docs`.
+2. **Front end:** `python3 scripts/build_pages.py https://song-matcher-2c6a.onrender.com`, commit `docs/`, push. Pages serves `main` → `/docs`.
 3. `ALLOWED_ORIGINS` (CORS), `RATE_PER_MIN`/`RATE_PER_DAY` (per visitor) and `LLM_DAILY_BUDGET` (AI calls per day; after that, catalogue picks) are set in `render.yaml`.
 
 The free Render instance sleeps after 15 idle minutes; the first visit takes about a minute to wake it. `claude-cli` is refused on a public deployment.

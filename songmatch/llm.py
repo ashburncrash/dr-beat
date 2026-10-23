@@ -83,6 +83,12 @@ class LLMClient:
         load_env(env_path)
         self.provider = (provider or os.environ.get("LLM_PROVIDER") or "").strip().lower()
         if not self.provider:
+            # No provider named: use the first free/paid key that is present (gemini first).
+            for prov in ("gemini", "groq", "openrouter", "anthropic", "openai"):
+                if os.environ.get(KEY_VARS[prov]) and (prov != "openrouter" or os.environ.get("LLM_MODEL")):
+                    self.provider = prov
+                    break
+        if not self.provider:
             raise LLMError("LLM not configured (set LLM_PROVIDER and LLM_MODEL in .env)")
         if self.provider not in DEFAULT_URLS:
             raise LLMError("LLM_PROVIDER must be one of: " + ", ".join(sorted(DEFAULT_URLS)))

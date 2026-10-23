@@ -104,6 +104,17 @@ class FreeProviderTests(unittest.TestCase):
             self.assertEqual(c.complete("s", "u"), "{}")
             self.assertEqual(http.calls[0][2]["Authorization"], "Bearer k")
 
+    def test_autodetect_provider_from_key(self):
+        saved = {k: os.environ.pop(k) for k in ("LLM_PROVIDER", "GEMINI_API_KEY", "GROQ_API_KEY",
+                                                 "OPENROUTER_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY") if k in os.environ}
+        try:
+            os.environ["GEMINI_API_KEY"] = "k"
+            c = LLMClient(None, None, env_path=NO_ENV)
+            self.assertEqual((c.provider, c.model), ("gemini", "gemini-3.5-flash"))
+        finally:
+            os.environ.pop("GEMINI_API_KEY", None)
+            os.environ.update(saved)
+
     def test_missing_key_named(self):
         saved = os.environ.pop("GROQ_API_KEY", None)
         try:
