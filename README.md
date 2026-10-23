@@ -1,4 +1,4 @@
-# 🎧 Song Matcher — your relationship, as a song
+# 🩺 Dr. Beat — your relationship, prescribed as a song (and a cocktail)
 
 Describe your relationship issue or status; it returns **one** song that fits.
 
